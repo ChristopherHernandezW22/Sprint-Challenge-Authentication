@@ -6,7 +6,7 @@ describe('Testing server route', () => {
 
     describe("Test Register", () => {
 
-        it('Return ok status code 200', async() => {
+        it('Return ok status 200', async() => {
             const res = await request(server)
                 .post("/api/auth/register")
                 .send({
@@ -22,5 +22,31 @@ describe('Testing server route', () => {
         });
     });
 
-    
+    describe('Test Login', () => {
+        it('Return ok status 200', async() => {
+            const res = await request(server)
+                .post("/api/auth/login")
+                .send({
+                    username: "chris",
+                    password: "12345"
+                });
+            expect(res.status).toBe(200);
+        });
+
+        it("Login info missing error", async() => {
+            const res = await request(server).post("/api/auth/login");
+            expect(res.status).toBe(500);
+        });
+
+        it("Login info is incorrect", async() => {
+            const res = await request(server)
+                .post("/api/auth/login")
+                .send({
+                    username: "chrisp",
+                    password: "1234"
+                });
+            expect(res.status).toBe(401);
+        });
+    });
+
 });

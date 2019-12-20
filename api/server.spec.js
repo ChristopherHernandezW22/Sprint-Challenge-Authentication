@@ -1,29 +1,26 @@
 const request = require('supertest'); 
 const server = require('./server.js'); 
 
-
   // http calls made with supertest return promises, we can use async/await if desired
-describe('index route', () => {
-    it('should return an OK status code from the index route', async () => {
-      const expectedStatusCode = 200;
-      const response = await request(server).get('/');
-      expect(response.status).toEqual(expectedStatusCode);
+describe('Testing server route', () => {
+
+    describe("Test Register", () => {
+
+        it('Return ok status code 200', async() => {
+            const res = await request(server)
+                .post("/api/auth/register")
+                .send({
+                    username: Date.now(),
+                    password: "1337"
+                });
+            expect(res.status).toBe(201);
+        });
+
+        it("Register information missing error", async() => {
+            const res = await request(server).post("/api/auth/register");
+            expect(res.status).toBe(500);
+        });
     });
 
-    describe("get /", function() {
-        it("Should return a 200 ok", function () {
-            return request(server)
-                .get("/api/jokes")
-                .then(res => {
-                    expect(res.status).toBe(200)
-                })
-            });
-        })
-
     
-
-    it('returns 200', () => {
-        return request(server).get('/')
-        .expect(200)
-  });
 });
